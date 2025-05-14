@@ -1,83 +1,125 @@
-const green = document.getElementById('green');
-const red = document.getElementById('red');
-const yellow = document.getElementById('yellow');
-const blue = document.getElementById('blue');
-const startBtn = document.getElementById('startBtn');
-const status = document.getElementById('status');
+    const green = document.getElementById('green');
+    const red = document.getElementById('red');
+    const yellow = document.getElementById('yellow');
+    const blue = document.getElementById('blue');
+    const startBtn = document.getElementById('startBtn');
+    const status = document.getElementById('status');
+    const rankingList = document.getElementById('rankingList');
 
-const buttons = [green, red, yellow, blue];
-const colors = ['green', 'red', 'yellow', 'blue'];
+    const buttons = [green, red, yellow, blue];
+    const colors = ['green', 'red', 'yellow', 'blue'];
 
-let sequence = [];
-let playerSequence = [];
-let level = 0;
-let waitingForInput = false;
+    let sequence = [];
+    let playerSequence = [];
+    let level = 0;
+    let waitingForInput = false;
+    let playerName = null;
+    let ranking = [];
 
-// Función para iluminar un botón
+    const nameModal = document.getElementById('nameModal');
+    const playerNameInput = document.getElementById('playerNameInput');
+    const confirmNameBtn = document.getElementById('confirmNameBtn');
+    const modalErrorMsg = document.getElementById('modalErrorMsg');
+    const errorName = document.getElementById('errorName');
+
 function lightUp(color) {
-  const btn = buttons[colors.indexOf(color)];
-  btn.classList.add('brightness-150');
-  setTimeout(() => btn.classList.remove('brightness-150'), 600);
+    const btn = buttons[colors.indexOf(color)];
+    btn.classList.add('brightness-150', 'shadow-[0_0_12px_4px_rgba(255,255,255,0.5)]');
+    setTimeout(() => btn.classList.remove('brightness-150', 'shadow-[0_0_12px_4px_rgba(255,255,255,0.5)]'), 600);
 }
 
-// Función para reproducir la secuencia
+
 function playSequence() {
-  waitingForInput = false;
-  let i = 0;
-  const interval = setInterval(() => {
-    lightUp(sequence[i]);
-    i++;
-    if (i >= sequence.length) {
-      clearInterval(interval);
-      waitingForInput = true;
-      status.textContent = `Turno del jugador: nivel ${level}`;
-      playerSequence = [];
-    }
-  }, 800);
+    waitingForInput = false;
+    let i = 0;
+    const interval = setInterval(() => {
+        lightUp(sequence[i]);
+        i++;
+        if (i >= sequence.length) {
+            clearInterval(interval);
+            waitingForInput = true;
+            status.textContent = `Turno de ${playerName}: nivel ${level}`;
+            playerSequence = [];
+        }
+    }, 800);
 }
 
-// Manejo del click en los botones de colores
 buttons.forEach((btn, idx) => {
-  btn.addEventListener('click', () => {
-    if (!waitingForInput) return;
+    btn.addEventListener('click', () => {
+        if (!waitingForInput) return;
 
-    lightUp(colors[idx]);
-    playerSequence.push(colors[idx]);
+        lightUp(colors[idx]);
+        playerSequence.push(colors[idx]);
 
-    // Comprobar si la secuencia es correcta hasta ahora
-    const currentStep = playerSequence.length - 1;
-    if (playerSequence[currentStep] !== sequence[currentStep]) {
-      status.textContent = '¡Fallaste! Juego terminado.';
-      waitingForInput = false;
-      startBtn.disabled = false;
-      return;
-    }
+        const currentStep = playerSequence.length - 1;
+        if (playerSequence[currentStep] !== sequence[currentStep]) {
+            status.textContent = `¡Fallaste! Juego terminado en nivel ${level}.`;
+            waitingForInput = false;
+            startBtn.disabled = false;
+            addToRanking(playerName, level);
+            renderRanking();
+            return;
+        }
 
-    // Si completó la secuencia correctamente
-    if (playerSequence.length === sequence.length) {
-      status.textContent = '¡Correcto! Preparando siguiente nivel...';
-      waitingForInput = false;
-      setTimeout(nextLevel, 1000);
-    }
-  });
+        if (playerSequence.length === sequence.length) {
+            status.textContent = `¡Correcto! Preparando siguiente nivel...`;
+            waitingForInput = false;
+            setTimeout(nextLevel, 1000);
+        }
+    });
 });
 
-// Iniciar el juego
-function startGame() {
-  sequence = [];
-  level = 0;
-  startBtn.disabled = true;
-  status.textContent = 'Comenzando...';
-  nextLevel();
+function startGame(name) {
+    playerName = name;
+    sequence = [];
+    level = 0;
+    startBtn.disabled = true;
+    status.textContent = `Comenzando juego para ${playerName}...`;
+    nextLevel();
 }
 
 function nextLevel() {
-  level++;
-  status.textContent = `Nivel ${level}`;
-  // Añadir nuevo color aleatorio
-  const randomColor = colors[Math.floor(Math.random() * colors.length)];
-  sequence.push(randomColor);
-  playSequence();
+    level++;
+    status.textContent = `Nivel ${level}`;
+    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    sequence.push(randomColor);
+    playSequence();
 }
 
-startBtn.addEventListener('click', startGame);
+function addToRanking(name, lvl) {
+    ranking.push({ name, level: lvl });
+    ranking.sort((a, b) => b.level - a.level);
+}
+
+function renderRanking() {
+    rankingList.innerHTML = '';
+    ranking.forEach(({ name, level }) => {
+        const li = document.createElement('li');
+        li.textContent = `${name} - Nivel ${level}`;
+        li.className = "border-b border-gray-700 py-1";
+        rankingList.appendChild(li);
+    });
+}
+
+startBtn.addEventListener('click', () => {
+    modalErrorMsg.classList.add('hidden');
+    playerNameInput.value = '';
+    nameModal.classList.remove('hidden');
+    playerNameInput.focus();
+});
+
+confirmNameBtn.addEventListener('click', () => {
+    const name = playerNameInput.value.trim();
+    if (!name) {
+        modalErrorMsg.classList.remove('hidden');
+        playerNameInput.focus();
+        return;
+    }
+    modalErrorMsg.classList.add('hidden');
+    nameModal.classList.add('hidden');
+    startGame(name);
+});
+
+playerNameInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') confirmNameBtn.click();
+});
