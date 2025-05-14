@@ -8,13 +8,13 @@ app.use(express.static(path.join(__dirname, "public")));//carpeta estatica publi
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, 'public','paginas','index.html'));//direccion del index
 });
-app.get("/ej1", (req, res) => {
+app.get("/juego1", (req, res) => {
   res.sendFile(path.join(__dirname, 'public','paginas','ej1.html'));//direccion de las paginas
 });
-app.get("/ej2", (req, res) => {
+app.get("/juego2", (req, res) => {
   res.sendFile(path.join(__dirname, 'public','paginas','ej2.html'));
 });
-app.get("/ej3", (req, res) => {
+app.get("/juego3", (req, res) => {
   res.sendFile(path.join(__dirname, 'public','paginas','ej3.html'));
 });
 
