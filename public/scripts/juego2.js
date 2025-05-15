@@ -57,7 +57,7 @@ function makeMove(index, player) {
     changeModeBtn.classList.remove('hidden');
     updateRanking(`${winnerName} (${player})`);
   } else if (gameState.every(c => c !== "")) {
-    statusText.textContent = "Empate 🤝";
+    statusText.textContent = "Empate";
     gameActive = false;
     restartBtn.classList.remove('hidden');
     changeModeBtn.classList.remove('hidden');
