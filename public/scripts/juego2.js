@@ -1,5 +1,3 @@
-// juegoTateti.js
-
 const cells = document.querySelectorAll('[data-cell]');
 const board = document.getElementById('board');
 const statusText = document.getElementById('gameStatus');

@@ -1,33 +1,32 @@
-    const green = document.getElementById('green');
-    const red = document.getElementById('red');
-    const yellow = document.getElementById('yellow');
-    const blue = document.getElementById('blue');
-    const startBtn = document.getElementById('startBtn');
-    const status = document.getElementById('status');
-    const rankingList = document.getElementById('rankingList');
+const green = document.getElementById('green');
+const red = document.getElementById('red');
+const yellow = document.getElementById('yellow');
+const blue = document.getElementById('blue');
+const startBtn = document.getElementById('startBtn');
+const statusText = document.getElementById('status');
+const rankingList = document.getElementById('rankingList');
 
-    const buttons = [green, red, yellow, blue];
-    const colors = ['green', 'red', 'yellow', 'blue'];
+const buttons = [green, red, yellow, blue];
+const colors = ['green', 'red', 'yellow', 'blue'];
 
-    let sequence = [];
-    let playerSequence = [];
-    let level = 0;
-    let waitingForInput = false;
-    let playerName = null;
-    let ranking = [];
+let sequence = [];
+let playerSequence = [];
+let level = 0;
+let waitingForInput = false;
+let playerName = null;
+let ranking = [];
 
-    const nameModal = document.getElementById('nameModal');
-    const playerNameInput = document.getElementById('playerNameInput');
-    const confirmNameBtn = document.getElementById('confirmNameBtn');
-    const modalErrorMsg = document.getElementById('modalErrorMsg');
-    const errorName = document.getElementById('errorName');
+const nameModal = document.getElementById('nameModal');
+const playerNameInput = document.getElementById('playerNameInput');
+const confirmNameBtn = document.getElementById('confirmNameBtn');
+const modalErrorMsg = document.getElementById('modalErrorMsg');
+const errorName = document.getElementById('errorName');
 
 function lightUp(color) {
     const btn = buttons[colors.indexOf(color)];
     btn.classList.add('brightness-150', 'shadow-[0_0_12px_4px_rgba(255,255,255,0.5)]');
     setTimeout(() => btn.classList.remove('brightness-150', 'shadow-[0_0_12px_4px_rgba(255,255,255,0.5)]'), 600);
 }
-
 
 function playSequence() {
     waitingForInput = false;
@@ -38,7 +37,7 @@ function playSequence() {
         if (i >= sequence.length) {
             clearInterval(interval);
             waitingForInput = true;
-            status.textContent = `Turno de ${playerName}: nivel ${level}`;
+            statusText.textContent = `Turno de ${playerName}: nivel ${level}`;
             playerSequence = [];
         }
     }, 800);
@@ -53,7 +52,7 @@ buttons.forEach((btn, idx) => {
 
         const currentStep = playerSequence.length - 1;
         if (playerSequence[currentStep] !== sequence[currentStep]) {
-            status.textContent = `¡Fallaste! Juego terminado en nivel ${level}.`;
+            statusText.textContent = `¡Fallaste! Juego terminado en nivel ${level}.`;
             waitingForInput = false;
             startBtn.disabled = false;
             addToRanking(playerName, level);
@@ -62,7 +61,7 @@ buttons.forEach((btn, idx) => {
         }
 
         if (playerSequence.length === sequence.length) {
-            status.textContent = `¡Correcto! Preparando siguiente nivel...`;
+            statusText.textContent = `¡Correcto! Preparando siguiente nivel...`;
             waitingForInput = false;
             setTimeout(nextLevel, 1000);
         }
@@ -74,13 +73,13 @@ function startGame(name) {
     sequence = [];
     level = 0;
     startBtn.disabled = true;
-    status.textContent = `Comenzando juego para ${playerName}...`;
+    statusText.textContent = `Comenzando juego para ${playerName}...`;
     nextLevel();
 }
 
 function nextLevel() {
     level++;
-    status.textContent = `Nivel ${level}`;
+    statusText.textContent = `Nivel ${level}`;
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
     sequence.push(randomColor);
     playSequence();

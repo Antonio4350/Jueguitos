@@ -1,113 +1,138 @@
-    let modo = '';
-    let nombres = { jugador1: 'Jugador 1', jugador2: 'Jugador 2' };
-    let puntajes = { jugador1: 0, jugador2: 0 };
-    let turnoJugador = 1;
-    let eleccionJugador1 = '';
+let mode = '';
+let names = { player1: 'Jugador 1', player2: 'Jugador 2' };
+let scores = { player1: 0, player2: 0 };
+let playerTurn = 1;
+let choicePlayer1 = '';
 
-    function seleccionarModo(elegido) {
-      modo = elegido;
-      document.getElementById('formularioNombres').classList.remove('hidden');
-      document.getElementById('nombre1').classList.remove('hidden');
-      document.getElementById('nombre2').classList.toggle('hidden', modo === 'maquina');
-      document.getElementById('error').classList.add('hidden');
-      // Limpio inputs
-      document.getElementById('nombre1').value = '';
-      document.getElementById('nombre2').value = '';
+const modeButtons = document.querySelectorAll('.select-mode');
+const moveButtons = document.querySelectorAll('.play-move');
+const nameInput1 = document.getElementById('name1');
+const nameInput2 = document.getElementById('name2');
+const nameForm = document.getElementById('nameForm');
+const errorMsg = document.getElementById('errorMsg');
+const startBtn = document.getElementById('startBtn');
+const changeModeBtn = document.getElementById('changeModeBtn');
+
+modeButtons.forEach(btn => {
+  btn.addEventListener('click', () => selectMode(btn.dataset.mode));
+});
+
+startBtn.addEventListener('click', () => startGame());
+
+changeModeBtn.addEventListener('click', () => resetToModal());
+
+moveButtons.forEach(btn => {
+  btn.addEventListener('click', () => play(btn.dataset.move));
+});
+
+function selectMode(selected) {
+  mode = selected;
+  nameForm.classList.remove('hidden');
+  nameInput1.classList.remove('hidden');
+  nameInput2.classList.toggle('hidden', mode === 'machine');
+  errorMsg.classList.add('hidden');
+  nameInput1.value = '';
+  nameInput2.value = '';
+}
+
+function startGame() {
+  const n1 = nameInput1.value.trim();
+  const n2 = nameInput2.value.trim();
+
+  if (!n1 || (mode === 'player' && !n2)) {
+    errorMsg.classList.remove('hidden');
+    return;
+  }
+
+  names.player1 = n1;
+  names.player2 = mode === 'player' ? n2 : 'Máquina';
+
+  document.getElementById('modal').classList.add('hidden');
+  document.getElementById('game').classList.remove('hidden');
+  document.getElementById('currentMode').textContent = `Modo: ${mode === 'player' ? '1 vs 1' : 'vs Máquina'}`;
+  updateRanking();
+  updateTurn();
+}
+
+function resetToModal() {
+  mode = '';
+  playerTurn = 1;
+  choicePlayer1 = '';
+  scores = { player1: 0, player2: 0 };
+  names = { player1: 'Jugador 1', player2: 'Jugador 2' };
+
+  document.getElementById('game').classList.add('hidden');
+  document.getElementById('modal').classList.remove('hidden');
+  nameForm.classList.add('hidden');
+  errorMsg.classList.add('hidden');
+  document.getElementById('resultDisplay').textContent = '';
+  document.getElementById('currentMode').textContent = '';
+  document.getElementById('turnDisplay').textContent = '';
+  updateRanking();
+}
+
+function updateRanking() {
+  document.getElementById('ranking').innerHTML = `
+    <li>${names.player1}: ${scores.player1}</li>
+    <li>${names.player2}: ${scores.player2}</li>
+  `;
+}
+
+function updateTurn() {
+  if (mode === 'player') {
+    document.getElementById('turnDisplay').textContent = `Turno: ${playerTurn === 1 ? names.player1 : names.player2}`;
+  } else {
+    document.getElementById('turnDisplay').textContent = `${names.player1}, elegí tu jugada.`;
+  }
+}
+
+function play(choice) {
+  if (mode === 'machine') {
+    const options = ['rock', 'paper', 'scissors'];
+    const machineChoice = options[Math.floor(Math.random() * 3)];
+    const result = getResult(choice, machineChoice);
+    showResult(choice, machineChoice, result);
+  } else {
+    if (playerTurn === 1) {
+      choicePlayer1 = choice;
+      playerTurn = 2;
+      updateTurn();
+    } else {
+      const result = getResult(choicePlayer1, choice);
+      showResult(choicePlayer1, choice, result);
+      playerTurn = 1;
+      updateTurn();
     }
+  }
+}
 
-    function iniciarJuego() {
-      const nombre1 = document.getElementById('nombre1').value.trim();
-      const nombre2 = document.getElementById('nombre2').value.trim();
+function getResult(p1, p2) {
+  if (p1 === p2) return 'draw';
+  if (
+    (p1 === 'rock' && p2 === 'scissors') ||
+    (p1 === 'paper' && p2 === 'rock') ||
+    (p1 === 'scissors' && p2 === 'paper')
+  ) {
+    scores.player1++;
+    return 'win1';
+  } else {
+    scores.player2++;
+    return 'win2';
+  }
+}
 
-      if (!nombre1 || (modo === 'jugador' && !nombre2)) {
-        document.getElementById('error').classList.remove('hidden');
-        return;
-      }
+function showResult(p1, p2, result) {
+  const translate = {
+    rock: '🪨 Piedra',
+    paper: '📄 Papel',
+    scissors: '✂️ Tijera'
+  };
 
-      nombres.jugador1 = nombre1;
-      nombres.jugador2 = modo === 'jugador' ? nombre2 : 'Máquina';
+  let text = `${names.player1} eligió ${translate[p1]} - ${names.player2} eligió ${translate[p2]} → `;
+  if (result === 'draw') text += '¡Empate!';
+  else if (result === 'win1') text += `¡${names.player1} gana!`;
+  else text += `¡${names.player2} gana!`;
 
-      document.getElementById('modal').classList.add('hidden');
-      document.getElementById('juego').classList.remove('hidden');
-      document.getElementById('modoActual').textContent = `Modo: ${modo === 'jugador' ? '1 vs 1' : 'Contra la Máquina'}`;
-      actualizarRanking();
-      actualizarTurno();
-    }
-
-    function volverAModal() {
-      // Reseteo estado de juego para que pueda elegir modo y nombres nuevamente
-      modo = '';
-      turnoJugador = 1;
-      eleccionJugador1 = '';
-      puntajes = { jugador1: 0, jugador2: 0 };
-      nombres = { jugador1: 'Jugador 1', jugador2: 'Jugador 2' };
-
-      document.getElementById('juego').classList.add('hidden');
-      document.getElementById('modal').classList.remove('hidden');
-      document.getElementById('formularioNombres').classList.add('hidden');
-      document.getElementById('error').classList.add('hidden');
-      document.getElementById('resultado').textContent = '';
-      document.getElementById('modoActual').textContent = '';
-      document.getElementById('turno').textContent = '';
-      actualizarRanking();
-    }
-
-    function actualizarRanking() {
-      document.getElementById('ranking').innerHTML = `
-        <li>${nombres.jugador1}: ${puntajes.jugador1}</li>
-        <li>${nombres.jugador2}: ${puntajes.jugador2}</li>
-      `;
-    }
-
-    function actualizarTurno() {
-      if (modo === 'jugador') {
-        document.getElementById('turno').textContent = `Turno de: ${turnoJugador === 1 ? nombres.jugador1 : nombres.jugador2}`;
-      } else {
-        document.getElementById('turno').textContent = `${nombres.jugador1}, hacé tu jugada.`;
-      }
-    }
-
-    function jugar(eleccion) {
-      if (modo === 'maquina') {
-        const opciones = ['piedra', 'papel', 'tijeras'];
-        const eleccionMaquina = opciones[Math.floor(Math.random() * 3)];
-        const resultado = obtenerResultado(eleccion, eleccionMaquina);
-        mostrarResultado(eleccion, eleccionMaquina, resultado);
-      } else {
-        if (turnoJugador === 1) {
-          eleccionJugador1 = eleccion;
-          turnoJugador = 2;
-          actualizarTurno();
-        } else {
-          const resultado = obtenerResultado(eleccionJugador1, eleccion);
-          mostrarResultado(eleccionJugador1, eleccion, resultado);
-          turnoJugador = 1;
-          actualizarTurno();
-        }
-      }
-    }
-
-    function obtenerResultado(j1, j2) {
-      if (j1 === j2) return 'empate';
-      if (
-        (j1 === 'piedra' && j2 === 'tijeras') ||
-        (j1 === 'papel' && j2 === 'piedra') ||
-        (j1 === 'tijeras' && j2 === 'papel')
-      ) {
-        puntajes.jugador1++;
-        return 'gana1';
-      } else {
-        puntajes.jugador2++;
-        return 'gana2';
-      }
-    }
-
-    function mostrarResultado(j1, j2, resultado) {
-      let texto = `${nombres.jugador1} eligió ${j1} - ${nombres.jugador2} eligió ${j2} → `;
-      if (resultado === 'empate') texto += '¡Empate!';
-      else if (resultado === 'gana1') texto += `¡Gana ${nombres.jugador1}!`;
-      else texto += `¡Gana ${nombres.jugador2}!`;
-
-      document.getElementById('resultado').textContent = texto;
-      actualizarRanking();
-    }
+  document.getElementById('resultDisplay').textContent = text;
+  updateRanking();
+}
