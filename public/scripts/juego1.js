@@ -122,3 +122,16 @@ confirmNameBtn.addEventListener('click', () => {
 playerNameInput.addEventListener('keydown', e => {
     if (e.key === 'Enter') confirmNameBtn.click();
 });
+//audio
+const audio = document.getElementById('musica-fondo');
+audio.volume = 0.3; // volumen al 30%
+audio.loop = true;
+audio.play();
+const botonMusica = document.getElementById('boton-musica');
+
+  botonMusica.addEventListener('click', () => {
+    audio.muted = !audio.muted;
+
+    // Cambia el texto del botón según el estado
+    botonMusica.textContent = audio.muted ? ' Activar música' : ' Silenciar música';
+  });
