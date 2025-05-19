@@ -8,14 +8,33 @@
 </head>
 <body class="bg-gray-800 text-white min-h-screen flex items-center justify-center p-4">
 
+  
   <div class="flex flex-col md:flex-row items-center justify-center w-full max-w-7xl gap-12">
-     <!-- Botón para cambiar de modo -->
+     
+    <!-- Botón para cambiar de modo -->
     <button id="changeModeBtn" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded mt-6 transition hidden">
         Cambiar modo de juego
     </button>
     <!-- Contenedor principal del juego -->
     <div class="flex flex-col items-center flex-shrink-0">
-       
+       <div class="flex justify-center gap-4 mb-12">
+        <audio id="musica-fondo" src="/public/multimedia/electronic-game1-332880.mp3" autoplay loop></audio>
+
+        <button id="boton-musica" class="bg-red-600 hover:bg-red-800 text-white font-semibold py-2 px-4 rounded-xl mt-4">
+          Silenciar música
+        </button>
+      </div>
+      <div class="flex justify-center gap-4 mb-12">
+        <button onclick="location.href='index.html'" class="bg-blue-600 hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-xl transition">
+            Volver al inicio
+        </button>
+        <button onclick="location.href='juego2.html'" class="bg-blue-600 hover:bg-green-800 text-white font-semibold py-2 px-4 rounded-xl transition">
+            Ir al Juego 2
+        </button>
+        <button onclick="location.href='juego3.html'" class="bg-blue-600 hover:bg-purple-800 text-white font-semibold py-2 px-4 rounded-xl transition">
+            Ir al Juego 3
+        </button>
+      </div>
       <h1 class="text-3xl md:text-4xl font-bold mb-6 text-center">TaTeTi</h1>
 
       <!-- Tablero del juego -->
