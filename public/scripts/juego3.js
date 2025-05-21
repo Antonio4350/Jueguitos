@@ -12,19 +12,19 @@ const nameForm = document.getElementById('nameForm');
 const errorMsg = document.getElementById('errorMsg');
 const startBtn = document.getElementById('startBtn');
 const changeModeBtn = document.getElementById('changeModeBtn');
-
+//acciona la funcion selectMode
 modeButtons.forEach(btn => {
   btn.addEventListener('click', () => selectMode(btn.dataset.mode));
 });
-
+//llama a la startGame para iniciar el juego
 startBtn.addEventListener('click', () => startGame());
-
+//llama a la funcion resetModal para reiniciar el juego
 changeModeBtn.addEventListener('click', () => resetToModal());
-
+//recibe el boton que se eligió(piedra, papel o tijera))
 moveButtons.forEach(btn => {
   btn.addEventListener('click', () => play(btn.dataset.move));
 });
-
+//selecciona el modo de juego 
 function selectMode(selected) {
   mode = selected;
   nameForm.classList.remove('hidden');
@@ -34,7 +34,7 @@ function selectMode(selected) {
   nameInput1.value = '';
   nameInput2.value = '';
 }
-
+//Inicia el juego si los campos de los nombres estan llenos 
 function startGame() {
   const n1 = nameInput1.value.trim();
   const n2 = nameInput2.value.trim();
@@ -53,7 +53,7 @@ function startGame() {
   updateRanking();
   updateTurn();
 }
-
+//Resetea todo el juego 
 function resetToModal() {
   mode = '';
   playerTurn = 1;
@@ -70,14 +70,14 @@ function resetToModal() {
   document.getElementById('turnDisplay').textContent = '';
   updateRanking();
 }
-
+//Actualiza el ranking
 function updateRanking() {
   document.getElementById('ranking').innerHTML = `
     <li>${names.player1}: ${scores.player1}</li>
     <li>${names.player2}: ${scores.player2}</li>
   `;
 }
-
+//muestra a quien le toca el turno
 function updateTurn() {
   if (mode === 'player') {
     document.getElementById('turnDisplay').textContent = `Turno: ${playerTurn === 1 ? names.player1 : names.player2}`;
@@ -85,7 +85,7 @@ function updateTurn() {
     document.getElementById('turnDisplay').textContent = `${names.player1}, elegí tu jugada.`;
   }
 }
-
+//Ejecuta una jugada dependiendo del modo elegido
 function play(choice) {
   if (mode === 'machine') {
     const options = ['rock', 'paper', 'scissors'];
@@ -105,7 +105,7 @@ function play(choice) {
     }
   }
 }
-
+//Determina el resultado comparando que se eligió
 function getResult(p1, p2) {
   if (p1 === p2) return 'draw';
   if (
@@ -120,7 +120,7 @@ function getResult(p1, p2) {
     return 'win2';
   }
 }
-
+//muestra el resultado en pantalla
 function showResult(p1, p2, result) {
   const translate = {
     rock: '🪨 Piedra',
@@ -141,11 +141,11 @@ const audio = document.getElementById('musica-fondo');
 audio.volume = 0.3; // volumen al 30%
 audio.loop = true;
 audio.play();
+//Activa o quita la musica
 const botonMusica = document.getElementById('boton-musica');
 
   botonMusica.addEventListener('click', () => {
     audio.muted = !audio.muted;
 
-    // Cambia el texto del botón según el estado
     botonMusica.textContent = audio.muted ? ' Activar música' : ' Silenciar música';
   });

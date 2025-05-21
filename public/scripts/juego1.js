@@ -21,13 +21,13 @@ const playerNameInput = document.getElementById('playerNameInput');
 const confirmNameBtn = document.getElementById('confirmNameBtn');
 const modalErrorMsg = document.getElementById('modalErrorMsg');
 const errorName = document.getElementById('errorName');
-
+//ilumina los botones
 function lightUp(color) {
     const btn = buttons[colors.indexOf(color)];
     btn.classList.add('brightness-150', 'shadow-[0_0_12px_4px_rgba(255,255,255,0.5)]');
     setTimeout(() => btn.classList.remove('brightness-150', 'shadow-[0_0_12px_4px_rgba(255,255,255,0.5)]'), 600);
 }
-
+//Acciona la secuencia de los colores del juego
 function playSequence() {
     waitingForInput = false;
     let i = 0;
@@ -42,14 +42,14 @@ function playSequence() {
         }
     }, 800);
 }
-
+//Funcion para cuando el jugador toca un boton
 buttons.forEach((btn, idx) => {
     btn.addEventListener('click', () => {
         if (!waitingForInput) return;
 
         lightUp(colors[idx]);
         playerSequence.push(colors[idx]);
-
+        //Si le erra
         const currentStep = playerSequence.length - 1;
         if (playerSequence[currentStep] !== sequence[currentStep]) {
             statusText.textContent = `¡Fallaste! Juego terminado en nivel ${level}.`;
@@ -59,7 +59,7 @@ buttons.forEach((btn, idx) => {
             renderRanking();
             return;
         }
-
+        //Si toca el que va
         if (playerSequence.length === sequence.length) {
             statusText.textContent = `¡Correcto! Preparando siguiente nivel...`;
             waitingForInput = false;
@@ -67,7 +67,7 @@ buttons.forEach((btn, idx) => {
         }
     });
 });
-
+//Hace comenzar el juego
 function startGame(name) {
     playerName = name;
     sequence = [];
@@ -76,7 +76,7 @@ function startGame(name) {
     statusText.textContent = `Comenzando juego para ${playerName}...`;
     nextLevel();
 }
-
+//Avanza al siguiente nivel
 function nextLevel() {
     level++;
     statusText.textContent = `Nivel ${level}`;
@@ -84,12 +84,12 @@ function nextLevel() {
     sequence.push(randomColor);
     playSequence();
 }
-
+//agrega el nombre del jugador al ranking
 function addToRanking(name, lvl) {
     ranking.push({ name, level: lvl });
     ranking.sort((a, b) => b.level - a.level);
 }
-
+//Muestra el ranking en pantalla
 function renderRanking() {
     rankingList.innerHTML = '';
     ranking.forEach(({ name, level }) => {
@@ -99,14 +99,14 @@ function renderRanking() {
         rankingList.appendChild(li);
     });
 }
-
+//Muestra el modal para mostrar el nombre
 startBtn.addEventListener('click', () => {
     modalErrorMsg.classList.add('hidden');
     playerNameInput.value = '';
     nameModal.classList.remove('hidden');
     playerNameInput.focus();
 });
-
+//chequea el nombre ingresado
 confirmNameBtn.addEventListener('click', () => {
     const name = playerNameInput.value.trim();
     if (!name) {
@@ -118,20 +118,20 @@ confirmNameBtn.addEventListener('click', () => {
     nameModal.classList.add('hidden');
     startGame(name);
 });
-
+//envia el nombre ingresado
 playerNameInput.addEventListener('keydown', e => {
     if (e.key === 'Enter') confirmNameBtn.click();
 });
 //audio
 const audio = document.getElementById('musica-fondo');
-audio.volume = 0.3; // volumen al 30%
+audio.volume = 0.3; 
 audio.loop = true;
 audio.play();
+//Activa o desactiva la musica
 const botonMusica = document.getElementById('boton-musica');
 
   botonMusica.addEventListener('click', () => {
     audio.muted = !audio.muted;
 
-    // Cambia el texto del botón según el estado
     botonMusica.textContent = audio.muted ? ' Activar música' : ' Silenciar música';
   });
