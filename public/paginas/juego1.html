@@ -6,10 +6,10 @@
   <title>Simon Dice</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-800 text-white min-h-screen flex flex-col items-center justify-start p-4 pt-24 pb-28">
+<body class="bg-gray-800 text-white min-h-screen flex flex-col items-center justify-start p-4 ">
 
   <!-- Botón de música centrado arriba -->
-  <div class="fixed top-4 left-1/2 transform -translate-x-1/2 flex items-center gap-4">
+<div class="flex justify-center mt-4 mb-6">
     <audio id="musica-fondo" src="/public/multimedia/electronic-game1-332880.mp3" autoplay loop></audio>
     <button id="boton-musica" class="bg-amber-950 hover:bg-red-800 text-white font-semibold py-2 px-4 rounded-xl">
       Silenciar música
@@ -55,8 +55,8 @@
   </div>
 
   <!-- Modal nombre -->
-  <div id="nameModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center hidden">
-    <div class="bg-gray-900 rounded-lg p-6 w-80 max-w-full text-center">
+  <div id="nameModal" class="fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center hidden">
+    <div class="bg-gray-900 rounded-lg p-6 w-80 max-w-full text-center z-50 shadow-2xl">
       <h2 class="text-xl font-semibold mb-4">Ingresa tu nombre para jugar</h2>
       <input id="playerNameInput" type="text" placeholder="Tu nombre" class="w-full p-2 rounded text-black mb-4 focus:outline-none" />
       <button id="confirmNameBtn" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded font-semibold transition">Comenzar</button>
