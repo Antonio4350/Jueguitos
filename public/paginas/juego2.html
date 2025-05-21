@@ -8,33 +8,24 @@
 </head>
 <body class="bg-gray-800 text-white min-h-screen flex items-center justify-center p-4">
 
-  
+  <!-- Controles de música arriba del todo, centrados y fijos -->
+  <div class="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 flex items-center gap-4">
+    <audio id="musica-fondo" src="/public/multimedia/electronic-game1-332880.mp3" autoplay loop></audio>
+
+    <button id="boton-musica" class="bg-red-600 hover:bg-red-800 text-white font-semibold py-2 px-4 rounded-xl">
+      Silenciar música
+    </button>
+  </div>
+
   <div class="flex flex-col md:flex-row items-center justify-center w-full max-w-7xl gap-12">
-     
+
     <!-- Botón para cambiar de modo -->
     <button id="changeModeBtn" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded mt-6 transition hidden">
-        Cambiar modo de juego
+      Cambiar modo de juego
     </button>
+
     <!-- Contenedor principal del juego -->
     <div class="flex flex-col items-center flex-shrink-0">
-       <div class="flex justify-center gap-4 mb-12">
-        <audio id="musica-fondo" src="/public/multimedia/electronic-game1-332880.mp3" autoplay loop></audio>
-
-        <button id="boton-musica" class="bg-red-600 hover:bg-red-800 text-white font-semibold py-2 px-4 rounded-xl mt-4">
-          Silenciar música
-        </button>
-      </div>
-      <div class="flex justify-center gap-4 mb-12">
-        <button onclick="location.href='index.html'" class="bg-blue-600 hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-xl transition">
-            Volver al inicio
-        </button>
-        <button onclick="location.href='juego2.html'" class="bg-blue-600 hover:bg-green-800 text-white font-semibold py-2 px-4 rounded-xl transition">
-            Ir al Juego 2
-        </button>
-        <button onclick="location.href='juego3.html'" class="bg-blue-600 hover:bg-purple-800 text-white font-semibold py-2 px-4 rounded-xl transition">
-            Ir al Juego 3
-        </button>
-      </div>
       <h1 class="text-3xl md:text-4xl font-bold mb-6 text-center">TaTeTi</h1>
 
       <!-- Tablero del juego -->
@@ -65,22 +56,35 @@
 
   <!-- Modal para ingresar nombre -->
   <div id="nameModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
-  <div class="bg-gray-900 rounded-lg p-6 w-80 max-w-full text-center">
-    <h2 class="text-xl font-semibold mb-4">Elegí el modo de juego</h2>
+    <div class="bg-gray-900 rounded-lg p-6 w-80 max-w-full text-center">
+      <h2 class="text-xl font-semibold mb-4">Elegí el modo de juego</h2>
 
-    <input id="playerNameInput" type="text" placeholder="Nombre Jugador 1" class="w-full p-2 rounded text-black mb-3 focus:outline-none" />
-    <input id="player2NameInput" type="text" placeholder="Nombre Jugador 2" class="w-full p-2 rounded text-black mb-4 focus:outline-none hidden" />
+      <input id="playerNameInput" type="text" placeholder="Nombre Jugador 1" class="w-full p-2 rounded text-black mb-3 focus:outline-none" />
+      <input id="player2NameInput" type="text" placeholder="Nombre Jugador 2" class="w-full p-2 rounded text-black mb-4 focus:outline-none hidden" />
 
-    <button id="vsPlayerBtn" class="bg-blue-600 hover:bg-blue-700 text-white w-full py-2 rounded font-semibold transition mb-2">
-      1 vs 1
-    </button>
-    <button id="vsCpuBtn" class="bg-purple-600 hover:bg-purple-700 text-white w-full py-2 rounded font-semibold transition">
-      Contra la máquina
-    </button>
+      <button id="vsPlayerBtn" class="bg-blue-600 hover:bg-blue-700 text-white w-full py-2 rounded font-semibold transition mb-2">
+        1 vs 1
+      </button>
+      <button id="vsCpuBtn" class="bg-purple-600 hover:bg-purple-700 text-white w-full py-2 rounded font-semibold transition">
+        Contra la máquina
+      </button>
 
-    <p id="modalErrorMsg" class="mt-2 text-sm text-red-600 hidden">Por favor ingresa los nombres requeridos</p>
+      <p id="modalErrorMsg" class="mt-2 text-sm text-red-600 hidden">Por favor ingresa los nombres requeridos</p>
+    </div>
   </div>
-</div>
+
+  <!-- Botones de navegación fijos al pie, centrados -->
+  <div class="w-full flex justify-center gap-4 mt-10 absolute bottom-4 left-0 right-0 z-50">
+    <button onclick="location.href='index.html'" class="bg-indigo-600 hover:bg-indigo-800 text-white font-semibold py-2 px-4 rounded-xl transition">
+      ⬅️ Inicio
+    </button>
+    <button onclick="location.href='juego2.html'" class="bg-blue-600 hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-xl transition">
+      🎮 Juego 2
+    </button>
+    <button onclick="location.href='juego3.html'" class="bg-green-600 hover:bg-green-800 text-white font-semibold py-2 px-4 rounded-xl transition">
+      🕹️ Juego 3
+    </button>
+  </div>
 
   <script src="../scripts/juego2.js"></script>
 </body>
