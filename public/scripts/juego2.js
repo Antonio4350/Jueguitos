@@ -17,13 +17,13 @@ let gameState = ["", "", "", "", "", "", "", "", ""];
 let vsCPU = false;
 let player1 = '';
 let player2 = '';
-
+//combinaciones para ganar
 const WINNING_COMBINATIONS = [
   [0, 1, 2], [3, 4, 5], [6, 7, 8],
   [0, 3, 6], [1, 4, 7], [2, 5, 8],
   [0, 4, 8], [2, 4, 6]
 ];
-
+//detecta el click del usuario y si no esta marcado ya lo marca
 function handleCellClick(e) {
   const cell = e.target;
   const index = Array.from(cells).indexOf(cell);
@@ -39,7 +39,7 @@ function handleCellClick(e) {
     }
   }, 500);
 }
-
+//verifica el resultado del juego
 function makeMove(index, player) {
   if (gameState[index] !== "" || !gameActive) return;
 
@@ -64,20 +64,20 @@ function makeMove(index, player) {
     statusText.textContent = `Turno de ${currentPlayer === 'X' ? player1 : player2}`;
   }
 }
-
+//le muestra las celdas vacias a la maquina para que elija entre cual marcar
 function getRandomEmptyCell() {
   const emptyIndices = gameState
     .map((val, idx) => val === "" ? idx : null)
     .filter(idx => idx !== null);
   return emptyIndices.length > 0 ? emptyIndices[Math.floor(Math.random() * emptyIndices.length)] : -1;
 }
-
+//analiza si o quien ganó
 function checkWin(player) {
   return WINNING_COMBINATIONS.some(combination =>
     combination.every(index => gameState[index] === player)
   );
 }
-
+//reinicia el juego
 function startGame() {
   gameState = ["", "", "", "", "", "", "", "", ""];
   currentPlayer = 'X';
@@ -91,17 +91,17 @@ function startGame() {
     cell.classList.remove('text-blue-300', 'text-red-400');
   });
 }
-
+//añade al ranking el nombre del que ganó
 function updateRanking(winner) {
   const li = document.createElement('li');
   li.textContent = `🏆 ${winner}`;
   rankingList.prepend(li);
 }
-
+//muestra o oculta el nombre del jugador2
 function showPlayer2Input(show) {
   player2NameInput.classList.toggle('hidden', !show);
 }
-
+//valida los nombres de los jugadores y establece el modo de juego
 function handleModeSelection(cpuMode) {
   const name1 = playerNameInput.value.trim();
   const name2 = player2NameInput.value.trim();
@@ -151,11 +151,12 @@ const audio = document.getElementById('musica-fondo');
 audio.volume = 0.3; // volumen al 30%
 audio.loop = true;
 audio.play();
+//activa o desactiva el sonido de fondo
 const botonMusica = document.getElementById('boton-musica');
 
   botonMusica.addEventListener('click', () => {
     audio.muted = !audio.muted;
 
-    // Cambia el texto del botón según el estado
+    
     botonMusica.textContent = audio.muted ? ' Activar música' : ' Silenciar música';
   });
