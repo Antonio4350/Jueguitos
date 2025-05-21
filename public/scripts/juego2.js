@@ -10,6 +10,9 @@ const vsPlayerBtn = document.getElementById('vsPlayerBtn');
 const vsCpuBtn = document.getElementById('vsCpuBtn');
 const changeModeBtn = document.getElementById('changeModeBtn');
 const rankingList = document.getElementById('rankingList');
+const victoriaSound = new Audio('../multimedia/Victoria.mp3');
+const errorSound = new Audio('../multimedia/Error.mp3');
+
 
 let currentPlayer = 'X';
 let gameActive = false;
@@ -45,9 +48,15 @@ function makeMove(index, player) {
 
   gameState[index] = player;
   cells[index].textContent = player;
+  victoriaSound.volume = 0.2;
+  victoriaSound.currentTime = 0;
+  victoriaSound.play();
   cells[index].classList.add(player === 'X' ? 'text-blue-300' : 'text-red-400');
 
   if (checkWin(player)) {
+    errorSound.volume = 0.2;
+    errorSound.currentTime = 0;
+    errorSound.play();
     const winnerName = player === 'X' ? player1 : player2;
     statusText.textContent = `¡${winnerName} (${player}) ganó!`;
     gameActive = false;
@@ -55,6 +64,9 @@ function makeMove(index, player) {
     changeModeBtn.classList.remove('hidden');
     updateRanking(`${winnerName} (${player})`);
   } else if (gameState.every(c => c !== "")) {
+    errorSound.volume = 0.2;
+    errorSound.currentTime = 0;
+    errorSound.play();
     statusText.textContent = "Empate";
     gameActive = false;
     restartBtn.classList.remove('hidden');
@@ -90,6 +102,8 @@ function startGame() {
     cell.textContent = "";
     cell.classList.remove('text-blue-300', 'text-red-400');
   });
+  audio.currentTime = 0;
+  audio.play();
 }
 //añade al ranking el nombre del que ganó
 function updateRanking(winner) {
@@ -148,7 +162,7 @@ changeModeBtn.addEventListener('click', () => {
 cells.forEach(cell => cell.addEventListener('click', handleCellClick));
 //audio
 const audio = document.getElementById('musica-fondo');
-audio.volume = 0.3; // volumen al 30%
+audio.volume = 0.1; // volumen al 30%
 audio.loop = true;
 audio.play();
 //activa o desactiva el sonido de fondo

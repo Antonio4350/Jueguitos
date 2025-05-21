@@ -12,6 +12,9 @@ const nameForm = document.getElementById('nameForm');
 const errorMsg = document.getElementById('errorMsg');
 const startBtn = document.getElementById('startBtn');
 const changeModeBtn = document.getElementById('changeModeBtn');
+const victoriaSound = new Audio('../multimedia/Victoria.mp3');
+const errorSound = new Audio('../multimedia/Error.mp3');
+
 //acciona la funcion selectMode
 modeButtons.forEach(btn => {
   btn.addEventListener('click', () => selectMode(btn.dataset.mode));
@@ -22,7 +25,12 @@ startBtn.addEventListener('click', () => startGame());
 changeModeBtn.addEventListener('click', () => resetToModal());
 //recibe el boton que se eligió(piedra, papel o tijera))
 moveButtons.forEach(btn => {
-  btn.addEventListener('click', () => play(btn.dataset.move));
+  btn.addEventListener('click', () => {
+    victoriaSound.volume = 0.2;
+    victoriaSound.currentTime = 0;
+    victoriaSound.play();
+    play(btn.dataset.move);
+  });
 });
 //selecciona el modo de juego 
 function selectMode(selected) {
@@ -52,6 +60,8 @@ function startGame() {
   document.getElementById('currentMode').textContent = `Modo: ${mode === 'player' ? '1 vs 1' : 'vs Máquina'}`;
   updateRanking();
   updateTurn();
+  audio.currentTime = 0;
+  audio.play();
 }
 //Resetea todo el juego 
 function resetToModal() {
@@ -69,6 +79,8 @@ function resetToModal() {
   document.getElementById('currentMode').textContent = '';
   document.getElementById('turnDisplay').textContent = '';
   updateRanking();
+  audio.currentTime = 0;
+  audio.play();
 }
 //Actualiza el ranking
 function updateRanking() {
@@ -123,13 +135,18 @@ function getResult(p1, p2) {
 //muestra el resultado en pantalla
 function showResult(p1, p2, result) {
   const translate = {
-    rock: '🪨 Piedra',
+    rock: '🗿 Piedra',
     paper: '📄 Papel',
     scissors: '✂️ Tijera'
   };
 
   let text = `${names.player1} eligió ${translate[p1]} - ${names.player2} eligió ${translate[p2]} → `;
-  if (result === 'draw') text += '¡Empate!';
+  if (result === 'draw') {
+    errorSound.volume = 0.2;
+    errorSound.currentTime = 0;
+    errorSound.play();
+    text += '¡Empate!';
+  }
   else if (result === 'win1') text += `¡${names.player1} gana!`;
   else text += `¡${names.player2} gana!`;
 
@@ -138,7 +155,7 @@ function showResult(p1, p2, result) {
 }
 //audio
 const audio = document.getElementById('musica-fondo');
-audio.volume = 0.3; // volumen al 30%
+audio.volume = 0.1; // volumen al 30%
 audio.loop = true;
 audio.play();
 //Activa o quita la musica

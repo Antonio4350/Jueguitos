@@ -5,6 +5,8 @@ const blue = document.getElementById('blue');
 const startBtn = document.getElementById('startBtn');
 const statusText = document.getElementById('status');
 const rankingList = document.getElementById('rankingList');
+const victoriaSound = new Audio('../multimedia/Victoria.mp3');
+const errorSound = new Audio('../multimedia/Error.mp3');
 
 const buttons = [green, red, yellow, blue];
 const colors = ['green', 'red', 'yellow', 'blue'];
@@ -52,6 +54,9 @@ buttons.forEach((btn, idx) => {
         //Si le erra
         const currentStep = playerSequence.length - 1;
         if (playerSequence[currentStep] !== sequence[currentStep]) {
+            errorSound.volume = 0.2;
+            errorSound.currentTime = 0;
+            errorSound.play();
             statusText.textContent = `¡Fallaste! Juego terminado en nivel ${level}.`;
             waitingForInput = false;
             startBtn.disabled = false;
@@ -75,10 +80,15 @@ function startGame(name) {
     startBtn.disabled = true;
     statusText.textContent = `Comenzando juego para ${playerName}...`;
     nextLevel();
+    audio.currentTime = 0;
+    audio.play();
 }
 //Avanza al siguiente nivel
 function nextLevel() {
     level++;
+    victoriaSound.volume = 0.2;
+    victoriaSound.currentTime = 0; // Reinicia el audio por si está en reproducción
+    victoriaSound.play();
     statusText.textContent = `Nivel ${level}`;
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
     sequence.push(randomColor);
@@ -124,7 +134,7 @@ playerNameInput.addEventListener('keydown', e => {
 });
 //audio
 const audio = document.getElementById('musica-fondo');
-audio.volume = 0.3; 
+audio.volume = 0.1; 
 audio.loop = true;
 audio.play();
 //Activa o desactiva la musica
